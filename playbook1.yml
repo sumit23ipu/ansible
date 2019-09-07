@@ -1,0 +1,22 @@
+---
+- name: execute a date command on localhost
+  hosts: localhost
+  tasks:
+    - name: Execute a date command
+      command: date
+    - name: execute Uptime command
+      command: uptime
+    - name: print no. of users in the system
+      shell: 'cat /etc/passwd | wc -l' 
+      register: user_output
+    - debug: var=user_output
+    - debug: msg='There are total {{ user_output.stdout }} user in my system'
+    - name: execute command
+      shell: 'cat /etc/passwd'
+      register: user1_output
+    - debug: var=user1_output
+    - name: Find root user
+      debug: msg='root user is present'
+      when: user1_output.stdout.find('sync') != -1   
+      debug: var=user1_output.stdout.find('sync')
+... 

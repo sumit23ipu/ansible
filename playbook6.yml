@@ -1,0 +1,37 @@
+---
+- hosts: web
+  
+  vars:
+    pack_name: httpd
+    serv_name: httpd
+
+  tasks:
+   - name: Install {{ pack_name }}
+     yum: pkg={{ pack_name }} state=installed
+     become: yes
+   - name: start {{ serv_name }}
+     service: name={{ serv_name }} state=started
+     become: yes
+   - name: stop {{ serv_name }}
+     service: name={{ serv_name }} state=stopped
+     become: yes
+
+   
+   - name: check content
+     shell: 'cat /usr/share/httpd/noindex/index.html |grep -i  "Ansible is easy" |wc -l' 
+     register: output
+   - debug: var=output
+   - name: display on webpage
+     lineinfile:
+      path: /usr/share/httpd/noindex/index.html
+      regexp: 'Ansible is easy'
+      line: My name is Sumit !!
+     become: yes
+     notify: RESTART HTTPD
+     when: output.stdout != "0" 
+  handlers:
+   - name: RESTART HTTPD
+     service: name={{ serv_name }} state=restarted
+     become: yes   
+...
+

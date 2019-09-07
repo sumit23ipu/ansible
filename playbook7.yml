@@ -1,0 +1,10 @@
+---
+- hosts: web
+  tasks:    
+    - name: making passowrd less client
+      authorized_key:
+      user: ec2-user
+      state: present
+      key: "{{ lookup('file', '/home/charlie/.ssh/id_rsa.pub') }}"
+      become: yes 
+...     

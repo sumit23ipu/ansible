@@ -1,0 +1,13 @@
+---
+- hosts: web
+  tasks:
+    - name: Add user
+      command: useradd sumit 
+      become: yes
+   
+    - name: set authrorized key took from file
+      authorized_key:
+        user: sumit 
+        state: present
+        key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
+      become: yes   

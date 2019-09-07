@@ -1,0 +1,23 @@
+---
+- hosts: web
+  
+  vars:
+    pack_name: httpd
+    service_name: httpd
+
+  tasks: 
+    - name: Install {{ pack_name }} 
+      yum: pkg={{ pack_name }} state=installed
+      become: yes
+    - name: Start {{ pack_name }}
+      service: name={{ service_name }} state=started
+      become: yes
+      register: output_content
+    - debug: var=output_content
+    - name: change the webpage
+      lineinfile: 
+        path: /usr/share/httpd/noindex/index.html
+        regexp: 'My name is Sumit'
+        line: Ansible is easy   
+      become: yes
+...
