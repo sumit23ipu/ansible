@@ -1,0 +1,12 @@
+---
+- hosts: web-servers
+  tasks:
+    - name: install httpd service
+      yum: pkg=httpd state=installed 
+      notify: 
+      - restart apache
+    - name: service start
+      service: name=httpd state=started enabled=yes
+  handlers:
+    - name: restart apache
+      service: name=httpd state=restarted  
