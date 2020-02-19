@@ -1,0 +1,11 @@
+---
+- hosts: web-servers
+  tasks: 
+    - name: check uptime
+      command: uptime
+    - name: exceute a command
+      shell: 'cat /etc/passwd |wc -l'
+      register: user_output
+    - debug: var=user_output
+    - debug: msg='There are total {{user_output.stdout}} user in my system' 
+   
